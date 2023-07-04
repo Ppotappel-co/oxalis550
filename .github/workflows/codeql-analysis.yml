@@ -68,6 +68,12 @@ jobs:
       # - run: |
       #   echo "Run, Build Application using script"
       #   ./location_of_script_within_repo/buildscript.sh
-
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-without-markdown
+          path: |
+            dist
+            !dist/**/*.md
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2
