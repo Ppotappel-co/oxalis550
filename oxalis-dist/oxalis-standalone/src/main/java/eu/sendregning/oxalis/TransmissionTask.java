@@ -188,7 +188,20 @@ public class TransmissionTask implements Callable<TransmissionResult> {
             throws IOException, EvidenceException {
         Span span = tracer.buildSpan("save evidence").asChildOf(root).start();
 
-        String transIdent = FileUtils.filterString(transmissionResponse.getTransmissionIdentifier().toString());
+		// PP - 04-07-2023 - Onderstaande aangepast, zodat we de evidencefile kunnen koppelen met het verzonden bestand.
+        //String transIdent = FileUtils.filterString(transmissionResponse.getTransmissionIdentifier().toString());
+		int pos = xmlPayloadFile.getName().lastIndexOf(".");
+		String xmlname;
+		if (pos != -1) {
+			xmlname = xmlPayloadFile.getName().substring(0, pos);
+		}
+		else
+		{
+			xmlname = xmlPayloadFile.getName();
+		}
+		String transIdent =	xmlname;
+	    // PP - 04-07-2023 - Einde aanpassing 
+                
         File evidenceFile = new File(evidencePath, transIdent + ".receipt.dat");
 
         try (OutputStream outputStream = Files.newOutputStream(evidenceFile.toPath())) {
